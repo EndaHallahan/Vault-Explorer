@@ -1,0 +1,7 @@
+<div class="vault-tree">
+	{% match tree_entry %}
+  		{% when Some with (entry) %}
+			{{entry.render().unwrap()|safe}}
+		{% when None %}
+	{% endmatch %}
+</div>

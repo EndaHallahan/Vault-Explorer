@@ -1,0 +1,14 @@
+
+
+.vault-tree {
+	.tree-children {
+		border-left: 1px solid black;
+		padding-left: .5rem;
+		margin-left: .5rem;
+
+		.tree-item:last-child {
+			margin-bottom: .5rem;
+		}
+		
+	}
+}

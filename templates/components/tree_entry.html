@@ -1,0 +1,23 @@
+<div class="tree-item">
+	<span class="pre"></span>
+	{% match item %}
+		{% when ItemType::Root %}
+			{{name}}
+		{% when ItemType::Note %}
+			<a href="/vault/{{vault_name|pathify}}/note/{{name|pathify}}">
+				{{name}}
+			</a>
+		{% when ItemType::Folder %}
+			{{name}}
+		{% when ItemType::File %}
+			<a href="/vault/{{vault_name|pathify}}/file/{{name|pathify}}">
+				{{name}}
+			</a>
+	{% endmatch %}
+	<div class="tree-children">
+		{% for c in children %}
+			{{ c.render().unwrap() }}
+		{% endfor %}
+	</div>
+
+</div>
