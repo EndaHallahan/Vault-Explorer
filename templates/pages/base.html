@@ -12,11 +12,13 @@
 
 <body>
 	<div id="page-container">
-		
+		{% include "../components/head_and_nav.html" %}
 
 		<div id="page-content">
 	      {% block content %}{% endblock %}
 	    </div>
+
+	    {% include "../components/footer.html" %}
 	</div>
 
 </body>

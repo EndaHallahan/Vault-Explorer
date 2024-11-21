@@ -2,11 +2,10 @@
 
 {% block content %}
 <main>
-	<h1>Vault-Dweller</h1>
 	<h2>Directory</h2>
 	<ul>
 	{% for vault in vault_list %}
-	<li>{{vault}}</li>
+	<li><a href="/vault/{{vault|pathify}}/note/Index">{{vault}}</a></li>
 	{% endfor %}
 	</ul>
 </main>

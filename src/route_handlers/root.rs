@@ -1,7 +1,7 @@
 use axum::{
     http::{StatusCode},
-    response::{Json, Html, Redirect, IntoResponse},
-    extract::{State, Path},
+    response::{Html, IntoResponse},
+    extract::{State},
 };
 use askama::Template;
 use std::sync::Arc;
@@ -9,6 +9,7 @@ use std::ops::Deref;
 
 use crate::appstate::AppState;
 use crate::basetemplate::BaseTemplate;
+use crate::helpers::filters;
 
 // Root
 #[derive(Template)]

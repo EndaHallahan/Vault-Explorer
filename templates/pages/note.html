@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<aside>
-	{% include "../components/vault_tree.html" %}
-</aside>
-<main>
-	<h1>{{note.name}}</h1>
-	<div>
-		{{note.content|safe}}
-	</div>
-</main>
+<div class="note-page">
+	<aside>
+		{% include "../components/vault_tree.html" %}
+	</aside>
+	<main>
+		<h1>{{note.name}}</h1>
+		<div>
+			{{note.content|safe}}
+		</div>
+	</main>
+</div>
 {% endblock %}

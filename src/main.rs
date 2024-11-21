@@ -1,11 +1,10 @@
 mod route_handlers;
 mod appstate;
 mod basetemplate;
+mod helpers;
 
 use axum::{
     routing::get,
-    routing::post,
-    routing::put,
     Router,
 };
 use std::{net::SocketAddr};
@@ -13,19 +12,17 @@ use tokio::signal;
 use std::env;
 use std::sync::Arc;
 use std::fs;
-use std::path::{ PathBuf };
-use anyhow::Context;
 use indexmap::{ IndexMap };
 use tower_http::services::ServeDir;
 
 use appstate::AppState;
-use vault_dweller::{ VaultIndex, VaultItem };
+use vault_dweller::{ VaultIndex, };
 use route_handlers::{ root, note };
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let vaults_dir_path = concat!(env!("CARGO_MANIFEST_DIR"), "/vaults");
-    let mut vaults: IndexMap<String, VaultIndex> = get_vault_index_map(vaults_dir_path);
+    let vaults: IndexMap<String, VaultIndex> = get_vault_index_map(vaults_dir_path);
 
     let shared_state = Arc::new(AppState {
         vaults,
@@ -42,13 +39,12 @@ async fn main() -> anyhow::Result<()> {
 
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
 
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(listener, app)
+        .with_graceful_shutdown(shutdown_signal())
+        .await
+        .expect("Failed to start server!");
 
     Ok(())   
-}
-
-async fn root() -> &'static str {
-    "Hello, world!"
 }
 
 async fn shutdown_signal() {
