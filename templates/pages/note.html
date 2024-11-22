@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="note-page">
-	<aside>
+<div data-unbound="nav-aside" class="note-page aside-expanded">
+	<aside  class="expanded">
 		{% include "../components/vault_tree.html" %}
+		<button class="aside-collapser">Index</button>
 	</aside>
 	<main>
-		<h1>{{note.name}}</h1>
-		<div>
-			{{note.content|safe}}
-		</div>
+		<article>
+			<h1>{{note.name}}</h1>
+			{{+ note.content|safe +}}
+		</article>
 	</main>
 </div>
 {% endblock %}

@@ -75,6 +75,7 @@ fn  markdown_options<'a>() -> Options<'a> {
     options.extension.front_matter_delimiter = Some("---".to_owned());
     options.extension.underline = true;
     options.extension.spoiler = true;
+    options.render.hardbreaks = true;
 
     options
 }

@@ -67,7 +67,7 @@ pub async fn get(
                 tree_entry: None,
             };
 
-            template.build_tree(&vi.tree, vault_name);
+            template.build_tree(&vi.tree, vault_name, note_name);
             let reply_html = template.render().unwrap();
             return (StatusCode::OK, Html(reply_html).into_response());
         } else {

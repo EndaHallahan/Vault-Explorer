@@ -9,5 +9,6 @@ pub struct TreeEntry {
     pub name: String,
     pub item: ItemType,
     pub vault_name: String,
+    pub open_note_name: String,
     pub children: Vec<TreeEntry>,
 }

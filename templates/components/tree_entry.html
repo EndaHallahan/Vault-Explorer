@@ -1,20 +1,24 @@
-<div class="tree-item">
+<div data-unbound="expand-parent" class="tree-item">
 	<span class="pre"></span>
 	{% match item %}
 		{% when ItemType::Root %}
-			{{name}}
+			<span class="force-expanded">{{name}}</span>
 		{% when ItemType::Note %}
 			<a href="/vault/{{vault_name|pathify}}/note/{{name|pathify}}">
-				{{name}}
+				{% if name == open_note_name %}
+					<span class="force-expanded">{{name}}</span>
+				{% else %}
+					{{name}}
+				{% endif %}
 			</a>
 		{% when ItemType::Folder %}
-			{{name}}
+			<button class="child-expander">{{name}}</button>
 		{% when ItemType::File %}
 			<a href="/vault/{{vault_name|pathify}}/file/{{name|pathify}}">
 				{{name}}
 			</a>
 	{% endmatch %}
-	<div class="tree-children">
+	<div class="tree-children expandable">
 		{% for c in children %}
 			{{ c.render().unwrap() }}
 		{% endfor %}
