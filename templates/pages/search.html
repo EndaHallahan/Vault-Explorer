@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="GET" data-unbound="search" class="search">
+	<input type="text" placeholder="Search..." name="query" required >
+	<span class="err-out"></span>
+	<button type="submit">Search</button>
+	<div class="search-results-out">
+
+	</div>
+	<template class="search-result-template">
+		<div class="result">
+			<h3 class="title-field"></h3>
+			<ul class="tags-field"></ul>
+			<p class="body-field"></p>
+		</div>
+	</template>
+</form>
+{% endblock %}

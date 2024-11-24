@@ -2,9 +2,11 @@ mod route_handlers;
 mod appstate;
 mod basetemplate;
 mod helpers;
+mod search_indexer;
 
 use axum::{
     routing::get,
+    routing::post,
     Router,
 };
 use std::{net::SocketAddr};
@@ -17,21 +19,27 @@ use tower_http::services::ServeDir;
 
 use appstate::AppState;
 use vault_dweller::{ VaultIndex, };
-use route_handlers::{ root, note };
+use route_handlers::{ root, note, search, api_search };
+use search_indexer::build_search_index;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let vaults_dir_path = concat!(env!("CARGO_MANIFEST_DIR"), "/vaults");
     let vaults: IndexMap<String, VaultIndex> = get_vault_index_map(vaults_dir_path);
-
+    let (search_reader, query_parser, schema) = build_search_index(&vaults).expect("Couldn't create search index!");
     let shared_state = Arc::new(AppState {
         vaults,
+        search_reader,
+        query_parser,
+        schema,
     });
 
     let app = Router::new()
         .nest_service("/assets", ServeDir::new("assets"))
         .route("/", get(root::get))
         .route("/vault/:vault/note/:note", get(note::get))
+        .route("/search", get(search::get))
+        .route("/api/search", get(api_search::get))
         .with_state(shared_state);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
