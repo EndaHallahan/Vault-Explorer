@@ -1,19 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form method="GET" data-unbound="search" class="search">
-	<input type="text" placeholder="Search..." name="query" required >
-	<span class="err-out"></span>
-	<button type="submit">Search</button>
-	<div class="search-results-out">
+<div class="search-page">
+	<form method="GET" data-unbound="search" class="search">
+		<input type="text" placeholder="Search..." name="query" required 
+		{% if let Some(q) = search_data.query %}
+			value="{{q}}"
+		{% endif %}
+		>
+		<span class="err-out"></span>
+		<button type="submit">Search</button>
+		<div class="search-results-out">
 
-	</div>
-	<template class="search-result-template">
-		<div class="result">
-			<h3 class="title-field"></h3>
-			<ul class="tags-field"></ul>
-			<p class="body-field"></p>
 		</div>
-	</template>
-</form>
+		<template class="search-result-template">
+			<div class="result">
+				<h3 class="title-field"></h3>
+				<span class="vault-field">⇪ </span>
+				<ul class="tags-field"></ul>
+				<p class="body-field"></p>
+			</div>
+		</template>
+	</form>
+</div>
 {% endblock %}

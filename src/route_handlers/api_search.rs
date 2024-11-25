@@ -4,19 +4,38 @@ use axum::{
     extract::{State, Query,},
 };
 use std::sync::Arc;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize};
 use tantivy::schema::*;
 use tantivy::collector::TopDocs;
+use tantivy::snippet::{Snippet, SnippetGenerator};
+use unicode_segmentation::UnicodeSegmentation;
 
 use crate::appstate::AppState;
 use crate::helpers::ajax_responses::{ respond_to_search, SearchResult };
-use crate::helpers::markdown::parse_md;
+use crate::helpers::markdown::strip_md;
+use crate::helpers::tags::condense_tags;
 
 #[derive(Deserialize, Debug)]
 pub struct SearchData {
     query: String,
 }
 
+fn highlight(snippet: Snippet) -> String {
+    let mut result = String::new();
+    let mut start_from = 0;
+
+    for fragment_range in snippet.highlighted() {
+        result.push_str(&snippet.fragment()[start_from..fragment_range.start]);
+        result.push_str("<b>");
+        result.push_str(&snippet.fragment()[fragment_range.clone()]);
+        result.push_str("</b>");
+        start_from = fragment_range.end;
+    }
+
+    result.push_str(&snippet.fragment()[start_from..]);
+
+    result
+}
 
 
 pub async fn get(
@@ -39,35 +58,56 @@ pub async fn get(
 
     let searcher = state.search_reader.searcher();
 
+    let title = state.schema.get_field("title").unwrap();
+    let vault = state.schema.get_field("vault").unwrap();
+    let tag = state.schema.get_field("tag").unwrap();
+    let body = state.schema.get_field("body").unwrap();
+
+
     if let Ok(query) = state.query_parser.parse_query(&payload.query) {
+        let snippet_generator = SnippetGenerator::create(&searcher, &*query, body).expect("Couldn't create snippit generator!");
         if let Ok(top_docs) = searcher.search(&query, &TopDocs::with_limit(50)) {
             let mut results: Vec<SearchResult> = vec![];
             for (_score, doc_address) in top_docs {
                 let retrieved_doc: TantivyDocument = searcher.doc(doc_address).expect("Couldn't retrieve document from index!");
                 
-                let title = state.schema.get_field("title").unwrap();
-                let vault = state.schema.get_field("vault").unwrap();
-                let tags = state.schema.get_field("tags").unwrap();
-                let body = state.schema.get_field("body").unwrap();
+                let snippet = snippet_generator.snippet_from_doc(&retrieved_doc);
 
                 let mut doc_vault_name: String = Default::default();
                 let mut doc_title: String = Default::default();
                 let mut doc_body: String = Default::default();
-                if let OwnedValue::Str(vn) = retrieved_doc.get_first(vault).unwrap() {
+                let mut doc_tags: Vec<String> = vec![];
+                if let Some(OwnedValue::Str(vn)) = retrieved_doc.get_first(vault) {
                     doc_vault_name = vn.to_string();
                 };
-                if let OwnedValue::Str(t) = retrieved_doc.get_first(title).unwrap() {
+                if let Some(OwnedValue::Str(t)) = retrieved_doc.get_first(title) {
                     doc_title = t.to_string();
                 };
-                if let OwnedValue::Str(b) = retrieved_doc.get_first(body).unwrap() {
-                    doc_body = b.to_string();
-                };
+                
+                if snippet.is_empty() {
+                    if let Some(OwnedValue::Str(b)) = retrieved_doc.get_first(body) {
+                        let mut g = UnicodeSegmentation::graphemes(b.as_str(), true).collect::<Vec<&str>>();
+                        g.truncate(150);
+                        doc_body = g.join("");
+                        doc_body.push_str("...");
+                    };
+                } else {
+                    doc_body = format!("...{}...", highlight(snippet));
+                }
 
-                if let Some(vi) =  state.vaults.get(&doc_vault_name) {
+                retrieved_doc.get_all(tag).for_each(|ot| {
+                    if let OwnedValue::Str(tag) = ot {
+                        doc_tags.push(tag.to_string());
+                    }
+                });
+
+                if let Some(_vi) =  state.vaults.get(&doc_vault_name) {
                     
                     let new_result = SearchResult {
                         title: doc_title,
-                        body: parse_md(doc_body, &vi),
+                        tags: condense_tags(doc_tags),
+                        body: strip_md(doc_body),
+                        vault: doc_vault_name,
                     };
                     results.push(new_result);
                 } else {

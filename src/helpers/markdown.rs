@@ -4,6 +4,16 @@ use comrak::{markdown_to_html, Options};
 
 use vault_dweller::{ VaultIndex, QueryOutput};
 
+pub fn parse_md(in_md: String, vault: &VaultIndex) -> String {
+    markdown_to_html(&convert_dataview(convert_links(in_md, &vault.name), &vault), &markdown_options())
+}
+
+pub fn strip_md(in_md: String) -> String {
+    let stripped_string = strip_links(in_md);
+    let re = Regex::new(r"(\*+)|[\n\r](>)|(```)|\W(_)|(_)\W|(_)$|(~~)|(#+) |(\[\[)|(\]\])").unwrap();
+    return re.replace_all(&stripped_string, "").to_string();
+}
+
 fn convert_links(in_md: String, vault_name: &String) -> String {
     let re = Regex::new(r"\[\[([^\]]+?)(\|[^\]]+)?\]\]").unwrap();
     return re.replace_all(&in_md, |caps: &Captures| {
@@ -80,6 +90,14 @@ fn  markdown_options<'a>() -> Options<'a> {
     options
 }
 
-pub fn parse_md(in_md: String, vault: &VaultIndex) -> String {
-	markdown_to_html(&convert_dataview(convert_links(in_md, &vault.name), &vault), &markdown_options())
+fn strip_links(in_md: String) -> String {
+    let re = Regex::new(r"\[\[([^\]]+?)(\|[^\]]+)?\]\]").unwrap();
+    return re.replace_all(&in_md, |caps: &Captures| {
+        let mut l_text = &caps[1];
+        if caps.get(2) != None {
+            l_text = &caps[2];
+        }
+        return l_text.replacen('|', "", 1).to_string();
+    }).to_string();
 }
+

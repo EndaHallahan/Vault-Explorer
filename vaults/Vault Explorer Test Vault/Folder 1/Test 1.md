@@ -1,5 +1,5 @@
 
-#Lorem/Ipsum
+#Lorem/Ipsum #Lorem/Argabarga
 
 Argabarga Lorem Ipsum
 
@@ -10,6 +10,11 @@ Argabarga Lorem Ipsum
 - [ ] Prince
 - [X] Open road
 
+~~strike~~
+
 ```rust
 Argabarga
 ```
+
+> blockquote
+> 

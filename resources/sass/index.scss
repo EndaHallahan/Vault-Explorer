@@ -111,6 +111,64 @@ main {
 	}
 }
 
+.search-page {
+	padding: 2rem;
+	form {
+		text-align: center;
+
+		input[type=text] {
+			font-size: 2rem;
+		}
+
+		button {
+			font-size: 2rem;
+		}
+
+		.search-results-out {
+			max-width: 60rem;
+			margin: 1rem auto;
+			display: grid;
+			grid-template-columns: 1fr;
+			grid-gap: 1rem;
+			margin-top: 2rem;
+			.result {
+				text-align: left;
+
+				&:not(:last-child) {
+					border-bottom: 1px solid black;
+				}
+				
+
+				h3.title-field {
+					margin: 0;
+				}
+
+				.vault-field {
+					padding-left: .5rem;
+					font-size: 1rem;
+				}
+
+				ul.tags-field {
+					list-style-type: none;
+					padding-left: 0;
+					margin: .5rem 0 .5rem .5rem;
+					li {
+						display: inline-block;
+						margin: 0 .25rem 0 0;
+					}
+				}
+
+				p {
+					margin-left: .5rem;
+					margin-top: .5rem;
+				}
+
+				
+			}
+		}
+	}
+}
+
 p {
 	margin: 1rem 0;
 }
@@ -120,4 +178,13 @@ blockquote {
 	border-left: 4px solid black;
 	padding-left: 1rem;
 
+}
+
+.tag {
+	font-size: 1rem;
+	font-style: italic;
+	border: 1px solid black;
+	border-radius: 30px;
+	padding: .1rem .5rem;
+	cursor: pointer;
 }

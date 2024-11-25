@@ -55,12 +55,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Folder 1/Untitled.md",
+                "file": "Folder 1/Test 1.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Untitled"
+              "title": "Test 1"
             }
           }
         ],
@@ -207,11 +207,11 @@
   },
   "active": "e0d4c8ec280afbd1",
   "lastOpenFiles": [
-    "Welcome.md",
-    "Index.md",
-    "Folder 1/Test 1.md",
-    "Folder 2/Test 2.md",
     "Folder 1/Untitled.md",
+    "Index.md",
+    "Welcome.md",
+    "Folder 2/Test 2.md",
+    "Folder 1/Test 1.md",
     "Folder 2",
     "Folder 1"
   ]

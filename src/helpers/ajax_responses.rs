@@ -3,7 +3,9 @@ use serde::{Serialize};
 #[derive(Serialize, Debug)]
 pub struct SearchResult {
     pub title: String,
+    pub tags: Vec<String>,
     pub body: String,
+    pub vault: String,
 }
 
 #[derive(Serialize)]

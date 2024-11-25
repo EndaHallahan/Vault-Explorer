@@ -32,11 +32,11 @@ pub struct SearchData {
 }
 
 pub async fn get(
-        State(state): State<Arc<AppState>>,
+        State(_state): State<Arc<AppState>>,
         Query(payload): Query<SearchData>
     ) -> impl IntoResponse {
 
-    let mut template = SearchTemplate { 
+    let template = SearchTemplate { 
         _parent: &BaseTemplate { 
             pagetitle: "Search",
             dark_mode: true,

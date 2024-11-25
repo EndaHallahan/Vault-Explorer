@@ -1,8 +1,7 @@
 use std::{ fs, env, path::PathBuf };
-use tantivy::collector::TopDocs;
 use tantivy::query::QueryParser;
 use tantivy::schema::*;
-use tantivy::{doc, Index, IndexWriter, IndexReader, IndexSettings, ReloadPolicy, error::TantivyError, directory::MmapDirectory};
+use tantivy::{Index, IndexWriter, IndexReader, ReloadPolicy, error::TantivyError, directory::MmapDirectory};
 use indexmap::{ IndexMap };
 
 use vault_dweller::{ VaultIndex, NoteItem };
@@ -23,7 +22,7 @@ pub fn build_search_index(vaults: &IndexMap<String, VaultIndex>) -> Result<(Inde
 
 	schema_builder.add_text_field("title", TEXT | STORED);
 	schema_builder.add_text_field("vault", STRING | STORED);
-	schema_builder.add_text_field("tags", STRING | STORED);
+	schema_builder.add_text_field("tag", STRING | STORED);
 	schema_builder.add_text_field("body", TEXT | STORED);
 	let schema = schema_builder.build();
 	let directory = MmapDirectory::open(path).expect("Couldn't find index directory!");
@@ -31,12 +30,12 @@ pub fn build_search_index(vaults: &IndexMap<String, VaultIndex>) -> Result<(Inde
 
 	let mut index_writer: IndexWriter = index.writer(50_000_000)?;
 
-	let clear_res = index_writer.delete_all_documents().unwrap();
+	let _clear_res = index_writer.delete_all_documents().unwrap();
     index_writer.commit()?;
 
 	let title = schema.get_field("title").unwrap();
 	let vault = schema.get_field("vault").unwrap();
-	let tags = schema.get_field("tags").unwrap();
+	let tags = schema.get_field("tag").unwrap();
     let body = schema.get_field("body").unwrap();
 
     for e in vaults.values().enumerate() {

@@ -6,7 +6,6 @@ mod search_indexer;
 
 use axum::{
     routing::get,
-    routing::post,
     Router,
 };
 use std::{net::SocketAddr};
