@@ -1,0 +1,27 @@
+<div data-unbound="side-nav" data-tab="tree" class="side-nav">
+	<div class="tab-headers">
+		<button data-tab="tree">Tree</button>
+		<button data-tab="search">Search</button>
+	</div>
+	<div data-tab="tree" class="tab">
+		{% include "./components/vault_tree.html" %}
+	</div>
+	<div data-tab="search" class="tab">
+		<form method="GET" data-unbound="search" data-vault="{{vault_name}}" class="search">
+			<div class="search-head">
+				<input type="text" placeholder="Search..." name="query" required >
+				<button type="submit">Search</button>
+			</div>
+			<div class="err-out"></div>
+			<div class="search-results-out">
+
+			</div>
+			<template class="search-result-template">
+				<div class="result">
+					<h4 class="title-field"></h4>
+					<p class="body-field"></p>
+				</div>
+			</template>
+		</form>
+	</div>
+</div>

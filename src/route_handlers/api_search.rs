@@ -123,8 +123,8 @@ pub async fn get(
         }
             
     } else {
-        let response = respond_to_search(false, Some("Something went wrong on our end!".to_string()), None);
-        return (StatusCode::INTERNAL_SERVER_ERROR, Json(response).into_response());
+        let response = respond_to_search(false, Some("Error! Query may have been malformed.".to_string()), None);
+        return (StatusCode::BAD_REQUEST, Json(response).into_response());
     }
 }
 

@@ -26,6 +26,9 @@ function dataBinder() {
 			case "tag":
 				new Tag(ele);
 				break;
+			case "side-nav":
+				new SideNav(ele);
+				break;
 			default:
 		}
 		ele.removeAttribute("data-unbound");
@@ -105,7 +108,11 @@ class Search {
 		this.disableable.forEach(ele => {
 			ele.disabled = true;
 		});
-		let payload = "query=" + encodeURIComponent(this.searchBar.value);
+		let val = this.searchBar.value;
+		if (this.vault) {
+			val = "vault:\"" + this.vault +"\" AND " + val;
+		}
+		let payload = "query=" + encodeURIComponent(val);
 		let data = await getAjax("/api/search", payload);
 		this.disableable.forEach(ele => {
 			ele.disabled = false;
@@ -165,8 +172,8 @@ class Search {
 			} else {
 				console.log(data);
 				if (this.errOut) {
-					if (data.msg) {
-						this.errOut.innerText = data.msg;
+					if (data.message) {
+						this.errOut.innerText = data.message;
 					} else {
 						this.errOut.innerText = "Something went wrong on our end. Try again later.";
 					}
@@ -189,6 +196,27 @@ class Tag {
 		window.dispatchEvent(searchFor);
 	}	
 }
+
+class SideNav {
+	constructor(element) {
+		this.boundEle = element;
+		this.boundEle.querySelectorAll(".tab-headers > button").forEach(button => {
+			button.addEventListener("click", e => {
+				this.switchTab(e.target.dataset.tab);
+			}, false);
+		});
+	}
+
+	switchTab(tabName) {
+		this.boundEle.dataset.tab = tabName;
+	}
+}
+
+
+
+
+
+
 
 async function getAjax(url, payload) {
 	 try {

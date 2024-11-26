@@ -22,6 +22,8 @@ body {
 
 header {
 	padding: .5rem 1rem;
+	border-bottom: 1px solid black;
+
 	h1 {
 		font-size: 2.5rem;
 		margin: 0;
@@ -41,17 +43,61 @@ aside {
 	top: 0;
 	box-sizing: border-box;
 	border: 1px solid black;
-	padding: 1rem .5rem .5rem 1rem;
+	border-top: none;
+	padding: .2rem .5rem .5rem .5rem;
 	max-height: 100vh;
 	transition: padding .3s ease-out;
 	text-wrap: nowrap;
 
+	.side-nav {
+		height: 100%;
 
+		.tab-headers {
+			height: 1.5rem;
+			overflow: hidden;
+			border-bottom: 1px solid black;
+
+			button {
+				all: unset;
+				border: 1px solid black;
+				border-bottom: none;
+
+				border-radius: 0 5px 0 0;
+				margin: 0;
+				padding: 0 .5rem;
+				cursor: pointer;
+			}
+		}
+
+		.tab {
+			display: none;
+			height: calc(100% - 1.5rem);
+			overflow: hidden;
+		}
+
+		&[data-tab=tree] {
+			.tab[data-tab=tree] {
+				display: block
+			}
+			.tab-headers button:not([data-tab=tree]) {
+				background-color: lightgray;
+			}
+		}
+
+		&[data-tab=search] {
+			.tab[data-tab=search] {
+				display: block
+			}
+			.tab-headers button:not([data-tab=search]) {
+				background-color: lightgray;
+			}
+		}
+	}
 	
 	.vault-tree {
 		overflow: auto;
-		overflow-x: scroll;
 		height: 100%;
+		padding-left: .5rem;
 		.tree-children {
 			border-left: 1px solid black;
 			padding-left: .5rem;
@@ -72,8 +118,65 @@ aside {
 		}
 	}
 
+	.tab[data-tab=search] {
+		form {
+			display: grid;
+			grid-template-columns: 1fr;
+			grid-template-rows: 2rem min-content 1fr;
+			height: 100%;
+		}
+
+		.search-head {
+			border-bottom: 1px solid black;
+			display: grid;
+			grid-template-columns: 1fr 5rem;
+			align-items: center;
+		}
+
+		.err-out {
+			text-wrap: wrap;
+		}
+
+		.search-results-out {
+			text-wrap: wrap;
+			overflow-y: auto;
+			max-height: 100%;
+			display: grid;
+			grid-template-columns: 1fr;
+			grid-gap: .5rem;
+			align-content: start;
+			padding: 0 .5rem;
+
+			.result {
+				text-align: left;
+
+				&:first-child {
+					margin-top: 1rem;
+				}
+
+				&:not(:last-child) {
+					border-bottom: 1px solid black;
+				}
+				
+
+				h4.title-field {
+					margin: 0;
+				}
+
+				p {
+					font-size: 1.1rem;
+					margin-left: .5rem;
+					margin-top: .2rem;
+				}
+
+				
+			}
+		}
+	}
+	
+
 	button.aside-collapser {
-		position:absolute;
+		position: absolute;
 		right: -3.6rem;
 		top: .5rem;
 		z-index: 100;
@@ -81,8 +184,10 @@ aside {
 }
 
 main {
-	padding: 2rem;
 	border: 1px solid black;
+	border-left: none;
+	border-top: none;
+
 }
 
 .note-page {
@@ -95,18 +200,49 @@ main {
 	&.aside-collapsed {
 		grid-template-columns: 0 1fr;
 		aside {
-			padding: 1rem 0;
+			padding-left: 0;
+			padding-right: 0;
 		}
 	}
 	
 	main {	
+		background: repeating-radial-gradient(circle, #F4F6F6, #F4F6F6, 11px, #E8E8E8 11px, #E8E8E8 400px);
+		background-size: 17px 17px;
+		background-position: 75% 50%;
+
 		article {
-			h1:first-child{
-				margin-top: 0;
-				font-size: 2.5rem;
+			box-sizing: border-box;
+			max-width: 64rem;
+			margin: 1rem auto;
+			min-height: calc(100% - 2rem);
+			padding: 3rem 2rem;
+			background-color: white;
+			box-shadow: 0px 1px 2px grey;
+
+			.note-head {
+				display: inline-grid;
+				grid-template-columns: 1rem minmax(min-content, max-content) minmax(1rem, 1fr);
+				width: 100%;
+				align-items: center;
+				grid-column-gap: 1rem;
+				margin-bottom: 1rem;
+
+				h1 {
+					margin: 0;
+					font-size: 2.5rem;
+					width: 100%;
+				}
+
+				hr {
+					width: 100%;
+					height: 0;
+					border: 1px solid black;
+					position: relative;
+					top: .25rem;
+				}
 			}
-			max-width: 60rem;
-			margin: 0 auto;
+			
+			
 		}
 	}
 }
@@ -130,6 +266,7 @@ main {
 			display: grid;
 			grid-template-columns: 1fr;
 			grid-gap: 1rem;
+			align-content: start;
 			margin-top: 2rem;
 			.result {
 				text-align: left;
@@ -175,7 +312,7 @@ p {
 
 blockquote {
 	margin: 1rem 0;
-	border-left: 4px solid black;
+	border-left: 4px solid lightgrey;
 	padding-left: 1rem;
 
 }

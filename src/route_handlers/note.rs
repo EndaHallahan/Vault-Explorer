@@ -24,6 +24,7 @@ struct NoteTemplate<'a> {
     pub _parent: &'a BaseTemplate<'a>,
     pub note: Note,
     pub tree_entry: Option<TreeEntry>,
+    pub vault_name: String,
 }
 
 impl_treebuilder!(NoteTemplate<'a>);
@@ -65,6 +66,7 @@ pub async fn get(
                 },
                 note,
                 tree_entry: None,
+                vault_name: vault_name.clone(),
             };
 
             template.build_tree(&vi.tree, vault_name, note_name);
