@@ -5,7 +5,7 @@ use comrak::{markdown_to_html, Options};
 use vault_dweller::{ VaultIndex, QueryOutput};
 
 pub fn parse_md(in_md: String, vault: &VaultIndex) -> String {
-    markdown_to_html(&convert_dataview(convert_links(in_md, &vault.name), &vault), &markdown_options())
+    markdown_to_html(&convert_tags(convert_dataview(convert_links(in_md, &vault.name), &vault)), &markdown_options())
 }
 
 pub fn strip_md(in_md: String) -> String {
@@ -68,6 +68,18 @@ fn convert_dataview(in_md: String, vault: &VaultIndex) -> String {
         }
 
         out_string
+    }).to_string();
+}
+
+fn convert_tags(in_md: String) -> String {
+    let re = Regex::new(r"#([^\s#<]+)").unwrap();
+     return re.replace_all(&in_md, |caps: &Captures| {
+        let mut l_text = &caps[1];
+        return format!(
+            "<span data-unbound=\"tag\" data-tag-name=\"{}\" class=\"tag\">#{}</span>", 
+            l_text,
+            l_text
+        );
     }).to_string();
 }
 

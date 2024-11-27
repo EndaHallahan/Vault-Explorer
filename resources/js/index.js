@@ -205,6 +205,9 @@ class SideNav {
 				this.switchTab(e.target.dataset.tab);
 			}, false);
 		});
+		window.addEventListener("searchFor", (event) => {
+			this.switchTab("search");
+		});
 	}
 
 	switchTab(tabName) {
