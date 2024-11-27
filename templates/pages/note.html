@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div data-unbound="nav-aside" data-tab="tree" class="note-page aside-expanded">
-	<aside  class="expanded">
+<div data-unbound="nav-aside" data-tab="tree" class="note-page 
+{% if side_nav_closed %}
+	aside-collapsed
+{% endif %}">
+	<aside class="expanded">
 		{% include "../components/side_nav.html" %}
 		<button class="aside-collapser">Index</button>
 	</aside>
 	<main>
 		<article>
 			<div class="note-head">
-				<hr/>
 				<h1>{{note.name}}</h1>
 				<hr/>
 			</div>

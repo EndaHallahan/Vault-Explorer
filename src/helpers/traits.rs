@@ -1,5 +1,5 @@
 use vault_dweller::{ Tree, };
-use crate::helpers::template_structs::TreeEntry;
+use crate::helpers::shared_templates::TreeEntry;
 
 pub trait TreeBuilder {  
     fn build_tree(&mut self, tree: &Tree, vault_name: String, open_note_name: String);

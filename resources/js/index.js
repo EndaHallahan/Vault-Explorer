@@ -39,12 +39,20 @@ function dataBinder() {
 class NavAside {
 	constructor(element) {
 		this.boundEle = element;
+		this.closed = this.boundEle.classList.contains("aside-collapsed");
 		this.collapseButton = this.boundEle.querySelector("button.aside-collapser");
 		this.collapseButton.addEventListener("click", this.collapseUncollapse.bind(this), false);
+		window.addEventListener("openAsideNav", (event) => {
+			if (this.closed) {
+				this.collapseUncollapse();
+			}
+		});
 	}
 
 	collapseUncollapse() {
 		this.boundEle.classList.toggle("aside-collapsed");
+		this.closed = !this.closed;
+		setCookie("side-nav-closed", this.closed, 365);
 	}
 }
 
@@ -194,6 +202,8 @@ class Tag {
 	searchMe() {
 		const searchFor = new CustomEvent("searchFor", { detail: "tag:\"" + this.tagName + "\"" });
 		window.dispatchEvent(searchFor);
+		const openAsideNav = new Event('openAsideNav');
+		window.dispatchEvent(openAsideNav);
 	}	
 }
 
@@ -219,7 +229,28 @@ class SideNav {
 
 
 
+function setCookie(cname, cvalue, exdays) {
+	const d = new Date();
+	d.setTime(d.getTime() + (exdays*24*60*60*1000));
+	let expires = "expires="+ d.toUTCString();
+	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
 
+function getCookie(cname) {
+	let name = cname + "=";
+	let decodedCookie = decodeURIComponent(document.cookie);
+	let ca = decodedCookie.split(';');
+	for(let i = 0; i <ca.length; i++) {
+		let c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
+}
 
 async function getAjax(url, payload) {
 	 try {

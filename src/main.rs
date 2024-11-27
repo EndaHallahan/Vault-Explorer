@@ -15,10 +15,11 @@ use std::sync::Arc;
 use std::fs;
 use indexmap::{ IndexMap };
 use tower_http::services::ServeDir;
+use tower_cookies::{ CookieManagerLayer };
 
 use appstate::AppState;
 use vault_dweller::{ VaultIndex, };
-use route_handlers::{ root, note, search, api_search };
+use route_handlers::{ root, vault, note, search, api_search };
 use search_indexer::build_search_index;
 
 #[tokio::main]
@@ -36,9 +37,11 @@ async fn main() -> anyhow::Result<()> {
     let app = Router::new()
         .nest_service("/assets", ServeDir::new("assets"))
         .route("/", get(root::get))
+        .route("/vault/:vault", get(vault::get))
         .route("/vault/:vault/note/:note", get(note::get))
         .route("/search", get(search::get))
         .route("/api/search", get(api_search::get))
+        .layer(CookieManagerLayer::new())
         .with_state(shared_state);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
