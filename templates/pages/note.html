@@ -1,10 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div data-unbound="nav-aside" data-tab="tree" class="note-page 
-{% if side_nav_closed %}
-	aside-collapsed
-{% endif %}">
+<div data-unbound="nav-aside" data-tab="tree" class="note-page">
 	<aside class="expanded">
 		{% include "../components/side_nav.html" %}
 		<button class="aside-collapser">Index</button>
@@ -19,4 +16,10 @@
 		</article>
 	</main>
 </div>
+<script>
+	if (window.localStorage.getItem("side-nav-closed") === "true") {
+		document.querySelector("div.note-page").classList.add("aside-collapsed");
+	}
+	
+</script>
 {% endblock %}

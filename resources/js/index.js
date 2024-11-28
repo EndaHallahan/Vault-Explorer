@@ -52,7 +52,8 @@ class NavAside {
 	collapseUncollapse() {
 		this.boundEle.classList.toggle("aside-collapsed");
 		this.closed = !this.closed;
-		setCookie("side-nav-closed", this.closed, 365);
+		window.localStorage.setItem("side-nav-closed", this.closed)
+		//setCookie("side-nav-closed", this.closed, 365);
 	}
 }
 

@@ -7,7 +7,6 @@ use axum::{
 };
 use askama::Template;
 use std::sync::Arc;
-use tower_cookies::{ Cookies };
 
 use crate::appstate::AppState;
 use crate::helpers::{
@@ -20,19 +19,10 @@ use crate::basetemplate::BaseTemplate;
 pub async fn get(
         State(state): State<Arc<AppState>>,
         Path((vault, note)): Path<(String, String)>,
-        cookies: Cookies,
     ) -> impl IntoResponse {
 
     let vault_name = vault.replace('_', " ");
     let note_name = note.replace('_', " ");
-
-    let mut side_nav_closed = false;
-    if let Some(val) = cookies.get("side-nav-closed") {
-        let pval = val.value();
-        if pval == "true" {
-            side_nav_closed = true
-        }
-    }
 
     if let Some(vi) =  state.vaults.get(&vault_name) {
         let vault_name = vi.name.clone();
@@ -51,7 +41,6 @@ pub async fn get(
                 note,
                 tree_entry: None,
                 vault_name: vault_name.clone(),
-                side_nav_closed,
             };
 
             template.build_tree(&vi.tree, vault_name, note_name);

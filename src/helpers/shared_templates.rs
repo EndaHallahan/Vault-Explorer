@@ -15,7 +15,6 @@ pub struct NoteTemplate<'a> {
     pub note: Note,
     pub tree_entry: Option<TreeEntry>,
     pub vault_name: String,
-    pub side_nav_closed: bool,
 }
 
 impl_treebuilder!(NoteTemplate<'a>);
