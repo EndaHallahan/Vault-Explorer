@@ -1099,6 +1099,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"highlight.js@npm:^11.10.0":
+  version: 11.10.0
+  resolution: "highlight.js@npm:11.10.0"
+  checksum: 10c0/cd8bf7ef06cbd72ddb83580ecabe769f08f062be8bb82d2eb492d31c17f7480d1f8d14a66fc81deee0601645435f19f04c470510563f847242a41ccff0ab873e
+  languageName: node
+  linkType: hard
+
 "http-cache-semantics@npm:^4.1.1":
   version: 4.1.1
   resolution: "http-cache-semantics@npm:4.1.1"
@@ -1866,6 +1873,7 @@ __metadata:
   resolution: "resources@workspace:."
   dependencies:
     css-loader: "npm:^7.1.2"
+    highlight.js: "npm:^11.10.0"
     mini-css-extract-plugin: "npm:^2.9.2"
     sass: "npm:^1.81.0"
     sass-loader: "npm:^16.0.3"

@@ -1,9 +1,12 @@
 import '../sass/index.scss';
+import 'highlight.js/styles/github-dark.css';
+import hljs from "highlight.js";
 
 const renderComplete = new Event('rendercomplete');
 
 window.addEventListener("load", () => {
 	dataBinder();
+	hljs.highlightAll();
 	dispatchEvent(renderComplete);
 }, false);
 
